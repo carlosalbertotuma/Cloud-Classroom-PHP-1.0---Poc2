@@ -1,5 +1,7 @@
-# Cloud-Classroom-PHP-1.0---Poc2
+# Cloud-Classroom-PHP-1.0
 
+
+Poc 2 - POST /classrooms/loginlinkstudent
 
 Presentation: SQL Injection Bypass Authentication via POST sid parameter
 
@@ -75,7 +77,7 @@ Full-path disclosure
 
 
 
-- classrooms/viewresult.php
+Poc 3 - classrooms/viewresult.php
 
 By bypassing we can access viewresult.php via GET, the endpoint is also subject to SQL injection, we can extract data via SQL UNION based.
 
