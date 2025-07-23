@@ -77,6 +77,8 @@ Full-path disclosure
 
 
 
+
+
 Poc 3 - classrooms/viewresult.php
 
 By bypassing we can access viewresult.php via GET, the endpoint is also subject to SQL injection, we can extract data via SQL UNION based.
