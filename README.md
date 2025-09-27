@@ -1,5 +1,6 @@
 # Cloud-Classroom-PHP-1.0
 
+## CVE-2025-56713
 
 Poc 2 - POST /classrooms/loginlinkstudent
 
@@ -77,7 +78,7 @@ Full-path disclosure
 
 
 
-
+## CVE-2025-56714
 
 Poc 3 - classrooms/viewresult.php
 
